@@ -10,11 +10,22 @@ def home(request):
         # text = request.POST["translate"]
         # language = request.POST["language"]
 
-        text = request.POST.get("translate", "").strip()
-        language = request.POST.get("language", "").strip()
+        # # text = request.POST.get("translate", "").strip()
+        # # language = request.POST.get("language", "").strip()
 
 
-        translator = Translator(to_lang=language)
-        translation = translator.translate(text)
+        # translator = Translator(to_lang=language)
+        # translation = translator.translate(text)
+        # return HttpResponse(translation)
+
+
+        text = request.POST["translate"]
+        language =  request.POST["language"]
+
+        try:
+            translator = Translator(to_lang=language)
+            translation = translator.translate(text)
+        except Exception:
+            translation = "Translation failed. Try different text or language."
         return HttpResponse(translation)
     return render(request, "main/index.html")

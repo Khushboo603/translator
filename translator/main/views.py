@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib import messages # added for newsletter
+from .models import newslatteremail # added for newsletter
 
 # Create your views here.
 # from translate import Translator
@@ -42,4 +44,14 @@ def home(request):
             except:
                 return HttpResponse("Wrong Input")
             return render(request,"main/index.html",{"result":result})
+        elif 'subscribe' in request.POST:
+            email = newslatteremail()
+            email.userEmail = request.POST.get("email")
+            email.save()
+            messages.info(request, 'You have successfully subscribed to your newslatter.')
+        elif 'unsubscribe' in request.POST:
+            newslatteremail.objects.get(
+                userEmail = request.POST.get("email")
+            ).delete()
+            messages.info(request, 'Sorry to see you!!!')
     return render(request, "main/index.html")
